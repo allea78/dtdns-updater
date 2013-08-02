@@ -2,9 +2,10 @@
 # =================================================================
 # dtdns-updater - Script to update dtdns hostname with current ip
 # =================================================================
-# @authors: 
-#           (Add your name if you contribute)
-# @Mantainer:
+# @authors: 	Alle <email>
+#		Massimo Barbieri <massimo@fsfe.org>
+#		(Add your name if you contribute)
+# @Mantainer: Alle <email>
 # @copyright 2013 GNU GPLv3
 # =================================================================
 # This script is free software; you can redistribute it and/or
