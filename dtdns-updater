@@ -47,13 +47,13 @@ fi
 sleep 10;
 
 CHECKIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
-        if [ "$IPADDR" != "$CHECKIP" ]; then
-                echo "An error is occurred!" ;
-		logger DTDNS An error is occurred -t $TAG;
-                exit 1 ;
-        else
-                echo "Change successfully!" ;
-                echo "Posted IP change from $LASTIP to $IPADDR"
-                logger Change IP "$IPADDR" -t $TAG ;
-		exit 2 ;
-        fi
+if [ "$IPADDR" != "$CHECKIP" ]; then
+	echo "An error is occurred!" ;
+	logger DTDNS An error is occurred -t $TAG;
+	exit 1 ;
+else
+	echo "Change successfully!" ;
+	echo "Posted IP change from $LASTIP to $IPADDR"
+	logger Change IP "$IPADDR" -t $TAG ;
+	exit 2 ;
+fi
