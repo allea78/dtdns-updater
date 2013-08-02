@@ -43,9 +43,9 @@ LASTIP=$(nslookup $ID.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | a
 		logger DTDNS An error is occurred ;
                 exit 1 ;
         else
-                echo "change successfully!" ;
+                echo "Change successfully!" ;
                 echo "Posted IP change from $LASTIP to $IPADDR"
-                logger IP cambiato "$IPADDR" -t $TAG ;
+                logger Change IP "$IPADDR" -t $TAG ;
 		exit 2 ;
         fi
 else
