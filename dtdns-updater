@@ -34,8 +34,21 @@ echo -n "`date` - "
 if [ "$IPADDR" != "$LASTIP" ]; then
   echo -e "GET /api/autodns.cfm?id=$ID&pw=$PASSWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
          nc www.dtdns.com 80 > /dev/null 2>&1
-  echo "Posted IP change from $LASTIP to $IPADDR"
-  logger Sent change IP request from $LASTIP to "$IPADDR" -t $TAG ;
+	 
+sleep 10;
+
+LASTIP=$(nslookup $ID.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | awk '{print $2 }')
+        if [ "$IPADDR" != "$LASTIP" ]; then
+                echo "An error is occurred!" ;
+		logger DDNS An error is occurred ;
+                exit 1 ;
+        else
+                echo "change successfully!" ;
+                echo "Posted IP change from $LASTIP to $IPADDR"
+                logger IP cambiato "$IPADDR" -t $TAG ;
+		exit 2 ;
+        fi
 else
   echo "IP still $IPADDR"
+  exit 0 ;
 fi
