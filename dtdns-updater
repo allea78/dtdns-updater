@@ -17,13 +17,9 @@
 # If not, see <http://www.gnu.org/licenses/>.
 ###################################################################
 
-<<<<<<< HEAD
 
 # Variables that you have to configure
-ID=hostname
-=======
 HOST=hostname
->>>>>>> 579b32cad42b47e33007aec0bf5205180a6a351a
 PASSWD=password
 DOMAIN=mydomain.com
 #############################
