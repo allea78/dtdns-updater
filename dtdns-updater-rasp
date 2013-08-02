@@ -1,0 +1,71 @@
+#!/bin/bash
+# =================================================================
+# dtdns-updater - Script to update dtdns hostname with current ip
+# =================================================================
+# @authors: 	Alle <alle@inventati.org>
+#		Massimo Barbieri <massimo@fsfe.org>
+#		(Add your name if you contribute)
+# @Mantainer: Alle alle@inventati.org
+# @copyright 2013 GNU GPLv3
+# =================================================================
+# This script is free software; you can redistribute it and/or
+# modify it under the terms of the GNU GENERAL PUBLIC LICENSE
+# License as published by the Free Software Foundation; either 
+# version 3 of the License, or any later version.
+# 
+# You should have received a copy of the GNU General Public 
+# License along with this library.
+# If not, see <http://www.gnu.org/licenses/>.
+###################################################################
+
+
+# Variables that you have to configure
+HOST=hostname
+DOMAIN=mydomain.com
+PASSWD=password
+#############################
+
+IPADDR=$(curl myip.dtdns.com)
+if [[ -z "$IPADDR"  ]]
+then
+        echo "Cannot check my ip at myip.dtdns.com"
+	exit 1
+fi
+
+# Exit:
+# 0 = Still IP
+# 1 = Error to check IP
+# 2 = Change IP
+
+LASTIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
+
+TAG="DTDNS-UPDATER"
+
+
+if [ "$IPADDR" != "$LASTIP" ]; then
+	echo -e "GET /api/autodns.cfm?id=$HOST&pw=$PASSWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
+         nc www.dtdns.com 80 > /dev/null 2>&1
+	echo "`date` - Sent ip change request to dtdns (from $LASTIP to $IPADDR)"
+	logger "Sent ip change request to dtdns (from $LASTIP to $IPADDR)" -t $TAG
+	exit 2
+else
+	echo "`date` - Still IP $IPADDR"
+	exit 0
+fi
+
+# VERIFICA
+# TODO: 10 secondi non sono assolutamente sufficienti
+# nel test che ho fatto occorrono circa 4 minuti
+sleep 10;
+
+CHECKIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
+if [ "$IPADDR" != "$CHECKIP" ]; then
+	echo "An error is occurred!" ;
+	logger DTDNS An error is occurred -t $TAG;
+	exit 1 ;
+else
+	echo "Change successfully!" ;
+	echo "Posted IP change from $LASTIP to $IPADDR"
+	logger Change IP "$IPADDR" -t $TAG ;
+	exit 2 ;
+fi
