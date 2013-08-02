@@ -35,7 +35,7 @@ if [ "$IPADDR" != "$LASTIP" ]; then
   echo -e "GET /api/autodns.cfm?id=$ID&pw=$PASSWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
          nc www.dtdns.com 80 > /dev/null 2>&1
   echo "Posted IP change from $LASTIP to $IPADDR"
-  logger IP cambiato "$IPADDR" -t $TAG ;
+  logger change IP "$IPADDR" -t $TAG ;
 else
   echo "IP still $IPADDR"
 fi
