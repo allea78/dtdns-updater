@@ -1,10 +1,10 @@
 #!/bin/bash
 
-ID=hostname
+HOST=hostname
 PASSWD=password
 DOMAIN=mydomain.com
 IPADDR=$(curl icanhazip.com)
-LASTIP=$(nslookup $ID.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | awk '{print $2 }')
+LASTIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | awk '{print $2 }')
 
 TAG="NEW-IP"
 
@@ -15,7 +15,6 @@ if [ "$IPADDR" != "$LASTIP" ]; then
          nc www.dtdns.com 80 > /dev/null 2>&1
   echo "Posted IP change from $LASTIP to $IPADDR"
   logger IP cambiato "$IPADDR" -t $TAG ;
-  echo $ID ;
 else
   echo "IP still $IPADDR"
 fi
