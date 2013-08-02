@@ -21,8 +21,8 @@
 
 # Variables that you have to configure
 HOST=hostname
-PASSWD=password
 DOMAIN=mydomain.com
+PASSWD=password
 #############################
 
 IPADDR=$(curl icanhazip.com)
