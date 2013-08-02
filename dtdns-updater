@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ID=hostname
-PWD=password
-DOMAIN=suroot.com
+PASSWD=password
+DOMAIN=mydomain.com
 IPADDR=$(curl icanhazip.com)
 LASTIP=$(nslookup $ID.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | awk '{print $2 }')
 
@@ -11,7 +11,7 @@ TAG="NEW-IP"
 echo -n "`date` - "
 
 if [ "$IPADDR" != "$LASTIP" ]; then
-  echo -e "GET /api/autodns.cfm?id=$ID&pw=$PWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
+  echo -e "GET /api/autodns.cfm?id=$ID&pw=$PASSWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
          nc www.dtdns.com 80 > /dev/null 2>&1
   echo "Posted IP change from $LASTIP to $IPADDR"
   logger IP cambiato "$IPADDR" -t $TAG ;
