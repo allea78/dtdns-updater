@@ -18,12 +18,16 @@
 # If not, see <http://www.gnu.org/licenses/>.
 ###################################################################
 
-
 # Variables that you have to configure
 HOST=hostname
 DOMAIN=mydomain.com
 PASSWD=password
 #############################
+
+# Exit:
+# 0 = Still IP
+# 1 = Error to check IP
+# 2 = Change IP
 
 IPADDR=$(curl myip.dtdns.com)
 if [[ -z "$IPADDR"  ]]
@@ -32,15 +36,9 @@ then
 	exit 1
 fi
 
-# Exit:
-# 0 = Still IP
-# 1 = Error to check IP
-# 2 = Change IP
-
 LASTIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
 
 TAG="DTDNS-UPDATER"
-
 
 if [ "$IPADDR" != "$LASTIP" ]; then
 	echo -e "GET /api/autodns.cfm?id=$HOST&pw=$PASSWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
