@@ -46,8 +46,8 @@ fi
 # TODO: 10 secondi non son o assolutamente sufficienti
 sleep 10;
 
-LASTIP=$(nslookup $ID.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | awk '{print $2 }')
-        if [ "$IPADDR" != "$LASTIP" ]; then
+CHECKIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
+        if [ "$IPADDR" != "$CHECKIP" ]; then
                 echo "An error is occurred!" ;
 		logger DTDNS An error is occurred ;
                 exit 1 ;
