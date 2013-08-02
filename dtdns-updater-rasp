@@ -52,20 +52,3 @@ else
 	echo "`date` - Still IP $IPADDR"
 	exit 0
 fi
-
-# VERIFICA
-# TODO: 10 secondi non sono assolutamente sufficienti
-# nel test che ho fatto occorrono circa 4 minuti
-sleep 10;
-
-CHECKIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
-if [ "$IPADDR" != "$CHECKIP" ]; then
-	echo "An error is occurred!" ;
-	logger DTDNS An error is occurred -t $TAG;
-	exit 1 ;
-else
-	echo "Change successfully!" ;
-	echo "Posted IP change from $LASTIP to $IPADDR"
-	logger Change IP "$IPADDR" -t $TAG ;
-	exit 2 ;
-fi
