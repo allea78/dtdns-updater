@@ -1,8 +1,29 @@
 #!/bin/bash
+# =================================================================
+# dtdns-updater - Script to update dtdns hostname with current ip
+# =================================================================
+# @authors: 
+#           (Add your name if you contribute)
+# @Mantainer:
+# @copyright 2013 GNU GPLv3
+# =================================================================
+# This script is free software; you can redistribute it and/or
+# modify it under the terms of the GNU GENERAL PUBLIC LICENSE
+# License as published by the Free Software Foundation; either 
+# version 3 of the License, or any later version.
+# 
+# You should have received a copy of the GNU General Public 
+# License along with this library.
+# If not, see <http://www.gnu.org/licenses/>.
+###################################################################
 
+
+# Variables that you have to configure
 ID=hostname
 PASSWD=password
 DOMAIN=mydomain.com
+#############################
+
 IPADDR=$(curl icanhazip.com)
 LASTIP=$(nslookup $ID.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | awk '{print $2 }')
 
