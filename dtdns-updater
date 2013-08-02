@@ -43,7 +43,8 @@ else
 fi
 
 # VERIFICA
-# TODO: 10 secondi non son o assolutamente sufficienti
+# TODO: 10 secondi non sono assolutamente sufficienti
+# nel test che ho fatto occorrono alcuni minuti
 sleep 10;
 
 CHECKIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
