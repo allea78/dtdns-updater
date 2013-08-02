@@ -18,57 +18,35 @@
 # If not, see <http://www.gnu.org/licenses/>.
 ###################################################################
 
-
 # Variables that you have to configure
 HOST=hostname
 DOMAIN=mydomain.com
 PASSWD=password
 #############################
-# OTHER VARIABLES TO CONSIDER
-TMPLOG="/tmp/dtdns-updater.tmp"
-TAG="DTDNS-UPDATER"
-CLIENT="Debian"
 
+# Exit:
+# 0 = Still IP
+# 1 = Error to check IP
+# 2 = Change IP
 
 IPADDR=$(curl myip.dtdns.com)
 if [[ -z "$IPADDR"  ]]
 then
-	echo "Cannot check my ip at myip.dtdns.com"
+        echo "Cannot check my ip at myip.dtdns.com"
 	exit 1
-fi
-
-if [ -f "$TMPLOG" ]
-then
-	rm -rf $TMPLOG
 fi
 
 LASTIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
 
-
+TAG="DTDNS-UPDATER"
 
 if [ "$IPADDR" != "$LASTIP" ]; then
-	echo -e "GET /api/autodns.cfm?id=$HOST&pw=$PASSWD&client=$CLIENT HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
-         nc www.dtdns.com 80 > $TMPLOG
-
-	# VERIFY
-	MSGDTDNS=$(tail -1 $TMPLOG)
-	CHECKIP=$(tail -1 $TMPLOG | awk '{print $6}' | sed '$s/.$//')
-
-	echo "$MSGDTDNS"
-	logger $MSGDTDNS -t $TAG
-	
-	rm -rf $TMPLOG
-
-	if  [ "$IPADDR" == "$CHECKIP" ]
-	then
-		exit 0
-	else
-		exit -1	
-	fi
-else
-	echo "`date` - Your public ip is already configure on dtdns"
-        logger "Your public ip is already configure on dtdns" -t $TAG	
+	echo -e "GET /api/autodns.cfm?id=$HOST&pw=$PASSWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
+         nc www.dtdns.com 80 > /dev/null 2>&1
+	echo "`date` - Sent ip change request to dtdns (from $LASTIP to $IPADDR)"
+	logger "Sent ip change request to dtdns (from $LASTIP to $IPADDR)" -t $TAG
 	exit 2
+else
+	echo "`date` - Still IP $IPADDR"
+	exit 0
 fi
-
-
