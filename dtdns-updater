@@ -25,7 +25,13 @@ DOMAIN=mydomain.com
 PASSWD=password
 #############################
 
-IPADDR=$(curl icanhazip.com)
+IPADDR=$(curl myip.dtdns.com)
+if [[ -z "$IPADDR"  ]]
+then
+        echo "Cannot check my ip at myip.dtdns.com"
+	exit 1
+fi
+
 LASTIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
 
 TAG="DTDNS-UPDATER"
@@ -39,7 +45,7 @@ if [ "$IPADDR" != "$LASTIP" ]; then
 else
 	echo "`date` - Your public ip is already configure on dtdns"
         logger "Your public ip is already configure on dtdns" -t $TAG	
-	exit 1
+	exit 2
 fi
 
 # VERIFICA
