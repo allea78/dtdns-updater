@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# PROVA
+
 HOST=hostname
 PASSWD=password
 DOMAIN=mydomain.com
