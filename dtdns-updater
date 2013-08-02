@@ -27,7 +27,7 @@ DOMAIN=mydomain.com
 IPADDR=$(curl icanhazip.com)
 LASTIP=$(nslookup $HOST.$DOMAIN ns1.darktech.org | grep -A1 "$HOST" | grep Address | awk '{print $2 }')
 
-TAG="NEW-IP"
+TAG="DTDNS-UPDATER"
 
 echo -n "`date` - "
 
@@ -35,8 +35,10 @@ if [ "$IPADDR" != "$LASTIP" ]; then
 	echo -e "GET /api/autodns.cfm?id=$HOST&pw=$PASSWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
          nc www.dtdns.com 80 > /dev/null 2>&1
 	echo "Sent ip change request to dtdns (from $LASTIP to $IPADDR)"
+	logger "Sent ip change request to dtdns (from $LASTIP to $IPADDR)" -t $TAG
 else
-	echo "Your public ip is alread configure on dtdns"
+	echo "Your public ip is already configure on dtdns"
+        logger "Your public ip is already configure on dtdns" -t $TAG	
 	exit 1
 fi
 
