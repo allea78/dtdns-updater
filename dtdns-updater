@@ -31,8 +31,10 @@ CLIENT="Debian"
 
 
 IPADDR=$(curl myip.dtdns.com)
-if [[ -z "$IPADDR"  ]]
-then
+VALIDATOR=$(echo $IPADDR | awk -F '.' '$1 < 255 && $2 < 255 && $3 < 255 && $4 < 255')
+
+if [ -z "$VALIDATOR" ] ; then
+
 	echo "Cannot check my ip at myip.dtdns.com"
 	exit 1
 fi
