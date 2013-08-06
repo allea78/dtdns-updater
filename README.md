@@ -1,3 +1,3 @@
 dtdns-updater
 =============
-Is a bash client that update hostname in dtdns.com.
+dtdns-updater is a bash GNU/Linux client that update you hostname/ip in dtdns.com. 
