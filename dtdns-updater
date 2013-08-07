@@ -17,6 +17,11 @@
 # License along with this library.
 # If not, see <http://www.gnu.org/licenses/>.
 ###################################################################
+# ERROR CODE
+# # 0 = No error.
+# # 1 = Unable to check my IP address
+# #-1 = Error while updating dtdns record
+# # 2 = IP already configured. No change is needed.
 
 
 # Variables that you have to configure
