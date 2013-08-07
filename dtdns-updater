@@ -36,6 +36,7 @@ VALIDATOR=$(echo $IPADDR | awk -F '.' '$1 < 255 && $2 < 255 && $3 < 255 && $4 < 
 if [ -z "$VALIDATOR" ] ; then
 
 	echo "Cannot check my ip at myip.dtdns.com"
+	logger Cannot check my ip at myip.dtdns.com -t $TAG
 	exit 1
 fi
 
