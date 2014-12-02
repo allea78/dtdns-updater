@@ -1,0 +1,46 @@
+#!/bin/bash
+# =================================================================
+# This script is free software; you can redistribute it and/or
+# modify it under the terms of the GNU GENERAL PUBLIC LICENSE
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or any later version.
+#
+# You should have received a copy of the GNU General Public
+# License along with this library.
+# If not, see <http://www.gnu.org/licenses/>.
+###################################################################
+ID=
+PWD=
+DOMAIN=
+IPADDR=$(curl icanhazip.com)
+LASTIP=$(nslookup $ID.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | awk '{print $2 }')
+
+TAG="NEW-IP"
+
+echo -n "`date` - "
+
+if [[ "$IPADDR" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+
+        if [ "$IPADDR" != "$LASTIP" ]; then
+        echo -e "GET /api/autodns.cfm?id=$ID&pw=$PWD&client=BSD HTTP/1.1\nHost: www.dtdns.com\nUser-Agent: bash\n\n" | \
+                nc www.dtdns.com 80 > /dev/null 2>&1
+
+        sleep 10;
+
+        LASTIP=$(nslookup $ID.$DOMAIN ns1.darktech.org | grep -A1 $ID | grep Address | awk '{print $2 }')
+                if [ "$IPADDR" != "$LASTIP" ]; then
+                        echo "An error is occurred!" ;
+                        exit 1 ;
+                else
+                        echo "change successfully!" ;
+                        echo "Posted IP change from $LASTIP to $IPADDR"
+                        logger IP cambiato "$IPADDR" -t $TAG ;
+                fi
+        else
+        echo "IP still $IPADDR"
+        fi
+
+else
+        echo "Cannot check my ip at myip.dtdns.com"
+        exit 1
+fi
