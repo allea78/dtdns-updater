@@ -42,6 +42,6 @@ if [[ "$IPADDR" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
         fi
 
 else
-        echo "Cannot check my ip at myip.dtdns.com"
+        echo "Cannot check my ip at icanhazip.com"
         exit 1
 fi
